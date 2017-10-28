@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/include :: headerFragment(~{::title}, ~{::style})">
+  <title>サンプルアプリケーション</title>
+  <style type="text/css">
+    body {
+      background-color: #DADADA;
+    }
+
+    body > .grid {
+      height: 100%;
+    }
+
+    .column {
+      max-width: 450px;
+    }
+  </style>
+</head>
+<body>
+<div class="ui middle aligned center aligned grid">
+  <div class="column">
+    <h2 class="ui image header">
+      ログイン
+    </h2>
+    <form class="ui large form" method="post" th:action="@{/login}" th:classappend="${param.error} ? error : ''">
+      <div class="ui stacked segment">
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="text" name="id" placeholder="id">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" name="password" placeholder="Password">
+          </div>
+        </div>
+        <button class="ui fluid large teal primary button">Login</button>
+      </div>
+      <div class="ui error message" th:if="${param.error}">
+        入力した内容を確認してください。
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

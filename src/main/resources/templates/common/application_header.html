@@ -1,0 +1,15 @@
+<div class="ui fixed inverted menu" th:fragment="application_header">
+  <div class="ui container">
+    <a href="#" class="header item">
+      サンプルアプリケーション
+    </a>
+    <a th:href="@{/projects}" class="item">Home</a>
+    <div class="ui simple dropdown item">
+      プロジェクト管理 <i class="dropdown icon"></i>
+      <div class="menu">
+        <a class="item" th:href="/projects/new">登録</a>
+      </div>
+    </div>
+  </div>
+</div>
+
