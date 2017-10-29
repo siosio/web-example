@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/include :: headerFragment(~{::title}, ~{})">
+  <title>サンプルアプリケーション</title>
+</head>
+<body>
+<div th:replace="common/application_header :: application_header">
+</div>
+<div class="ui main text container">
+  <h1 class="ui header">プロジェクト登録</h1>
+</div>
+</body>
+</html>

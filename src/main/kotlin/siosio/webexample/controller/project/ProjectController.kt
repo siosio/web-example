@@ -1,4 +1,4 @@
-package siosio.webexample.controller
+package siosio.webexample.controller.project
 
 import org.springframework.stereotype.*
 import org.springframework.web.bind.annotation.*
@@ -11,5 +11,4 @@ class ProjectController {
     fun index(): String {
         return "project/index"
     }
-
 }
