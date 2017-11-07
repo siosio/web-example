@@ -31,8 +31,8 @@ class ProjectServiceTest {
                 it.execute("truncate table project")
                 it.execute("truncate table client")
                 it.execute("set referential_integrity true")
-                it.execute("insert into client (client_id, naem) values (100, 'name')")
-                it.execute("insert into client (client_id, naem) values (500, 'name')")
+                it.execute("insert into client (client_id, name) values (100, 'name')")
+                it.execute("insert into client (client_id, name) values (500, 'name')")
             }
         }
     }
@@ -79,6 +79,16 @@ class ProjectServiceTest {
         assertThat(searchProjectPeriod(domaConfig))
                 .`as`("うロジェクト期間は未指定なので登録されない")
                 .isEmpty()
+    }
+
+    @Test
+    fun 顧客の存在チェック() {
+        assertThat(sut.existsClient(500))
+                .`as`("存在しているのでtrue")
+                .isTrue()
+        assertThat(sut.existsClient(501))
+                .`as`("存在していないのでfalse")
+                .isFalse()
     }
 }
 

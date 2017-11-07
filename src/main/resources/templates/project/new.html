@@ -1,13 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common/include :: headerFragment(~{::title}, ~{})">
+<head th:include="common/include :: headerFragment(~{::title}, ~{}, ~{::script}, ~{::link})">
   <title>サンプルアプリケーション</title>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.js"
+          type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.css"/>
 </head>
 <body>
 <div th:replace="common/application_header :: application_header">
 </div>
 <div class="ui main text container">
   <h1 class="ui header">プロジェクト登録</h1>
+
+  <!--/*@thymesVar id="newProjectForm" type="siosio.webexample.controller.project.NewProjectController.NewProjectForm"*/-->
+  <form method="post" th:action="@{/projects/create(confirm=)}" class="ui form" th:object="${newProjectForm}">
+    <div class="required field" th:classappend="${#fields.hasErrors('projectName') ? 'error' : ''}">
+      <label>プロジェクト名</label>
+      <input type="text" name="projectName" placeholder="プロジェクト名" th:field="*{projectName}">
+      <div class="ui pointing red basic label" th:if="${#fields.hasErrors('projectName')}" th:errors="*{projectName}">
+      </div>
+    </div>
+    <div class="required field" th:classappend="${#fields.hasErrors('projectType') ? 'error' : ''}">
+      <label>プロジェクトタイプ</label>
+      <select class="ui dropdown" name="projectType">
+        <option value="">プロジェクトタイプ</option>
+        <!--/*@thymesVar id="type" type="siosio.webexample.domain.ProjectType"*/-->
+        <option th:each="type : ${T(siosio.webexample.domain.ProjectType).values()}"
+                th:value="${type.id}"
+                th:selected="${type.id == newProjectForm.projectType}"
+                th:text="${type.label}"></option>
+      </select>
+      <div class="ui pointing red basic label" th:if="${#fields.hasErrors('projectType')}" th:errors="*{projectType}">
+      </div>
+    </div>
+    <div class="required field" th:classappend="${#fields.hasErrors('clientId') ? 'error' : ''}">
+      <label>顧客</label>
+      <input type="text" name="clientId" placeholder="顧客" th:field="*{clientId}">
+      <div class="ui pointing red basic label" th:if="${#fields.hasErrors('clientId')}" th:errors="*{clientId}">
+      </div>
+    </div>
+    <div class="field ui calendar">
+      <label>プロジェクト開始日</label>
+      <div class="ui input left icon">
+        <i class="calendar icon"></i>
+        <input type="text" name="endDate" placeholder="プロジェクト開始日" th:field="*{startDate}">
+      </div>
+      <div class="ui pointing red basic label" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">
+      </div>
+    </div>
+    <div class="field ui calendar">
+      <label>プロジェクト終了日</label>
+      <div class="ui input left icon">
+        <i class="calendar icon"></i>
+        <input type="text" name="endDate" placeholder="プロジェクト終了日" th:field="*{endDate}">
+      </div>
+      <div class="ui pointing red basic label" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}">
+      </div>
+    </div>
+    <button class="primary ui button">確認</button>
+  </form>
 </div>
+<script>
+  $('.ui.calendar').calendar({
+    type: 'date',
+    formatter: {
+      date: function (date) {
+        var day = ('0' + date.getDate()).slice(-2);
+        var month = ('0' + (date.getMonth() + 1)).slice(-2);
+        var year = date.getFullYear();
+        return year + '/' + month + '/' + day;
+      }
+    }
+  })
+</script>
 </body>
 </html>

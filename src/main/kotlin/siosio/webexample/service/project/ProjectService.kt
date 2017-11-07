@@ -6,7 +6,9 @@ import siosio.webexample.entity.*
 import siosio.webexample.service.dto.*
 
 @Service
-class ProjectService(private val projectDao: ProjectDao) {
+class ProjectService(
+        private val projectDao: ProjectDao,
+        private val clientDao: ClientDao) {
 
     fun register(projectDto: ProjectDto): ProjectEntity {
         return projectDao.insert(
@@ -17,5 +19,9 @@ class ProjectService(private val projectDao: ProjectDao) {
             }
             it
         }
+    }
+
+    fun existsClient(clientId: Long): Boolean {
+        return clientDao.existsClient(clientId)
     }
 }

@@ -16,6 +16,7 @@ public class ClientEntity {
     @Column(name = "client_id")
     private final Long clientId;
 
+    @Column(name = "name")
     private final String name;
 
     public ClientEntity(final Long clientId, final String name) {

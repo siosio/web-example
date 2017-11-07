@@ -18,7 +18,7 @@ class SecurityConfig(private val userService: UserService) : WebSecurityConfigur
                 .and()
                 .formLogin().loginPage("/login")
                 .usernameParameter("id")
-                .defaultSuccessUrl("/projects")
+                .defaultSuccessUrl("/projects", true)
                 .permitAll()
                 .and()
                 .logout()
