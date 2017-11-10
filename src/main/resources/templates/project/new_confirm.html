@@ -1,7 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common/include :: headerFragment(~{::title}, ~{}, ~{}, ~{})">
+<head th:include="common/include :: headerFragment(~{::title}, ~{}, ~{::script}, ~{::style})">
   <title>サンプルアプリケーション</title>
+
+  <style>
+    div.field > div {
+      height: 1.25em;
+    }
+  </style>
+
+  <script>
+    $(function () {
+      $('#complete').click(function () {
+        $('#form').submit();
+      });
+
+      $('#back').click(function () {
+        var $form = $('#form');
+        $form.attr('action', $('#backForm').attr('action'));
+        $form.submit();
+      })
+    })
+  </script>
 </head>
 <body>
 <div th:replace="common/application_header :: application_header">
@@ -10,13 +30,37 @@
   <h1 class="ui header">プロジェクト登録</h1>
 
   <!--/*@thymesVar id="newProjectForm" type="siosio.webexample.controller.project.NewProjectController.NewProjectForm"*/-->
-  <form method="post" th:action="@{/projects/create}" class="ui form" th:object="${newProjectForm}">
-    <div class="field">
+  <form class="ui form " th:object="${newProjectForm}" id="form" th:action="@{/projects/create(complete=)}"
+        method="post">
+    <div class="field ">
       <label>プロジェクト名</label>
-      <span th:value="*{projectName}">プロジェクト名</span>
+      <div class="sixteen wide column" th:text="*{projectName}">プロジェクト名</div>
+      <input type="hidden" th:field="*{projectName}"/>
     </div>
-    <button class="primary ui button">確認</button>
+    <div class="field">
+      <label>プロジェクトタイプ</label>
+      <div th:text="*{projectTypeName}">新規プロジェクト</div>
+      <input type="hidden" th:field="*{projectType}"/>
+    </div>
+    <div class="field">
+      <label>顧客</label>
+      <div th:text="*{clientId}">顧客</div>
+      <input type="hidden" th:field="*{clientId}"/>
+    </div>
+    <div class="field">
+      <label>プロジェクト開始日</label>
+      <div th:text="*{startDate}">2017/11/02</div>
+      <input type="hidden" th:field="*{startDate}"/>
+    </div>
+    <div class="field">
+      <label>プロジェクト終了日</label>
+      <div th:text="*{endDate}">2017/11/30</div>
+      <input type="hidden" th:field="*{endDate}"/>
+    </div>
+    <div class="ui button" id="back">戻る</div>
+    <div class="primary ui button" id="complete">登録</div>
   </form>
+  <form th:action="@{/projects/create(back=)}" id="backForm"></form>
 </div>
 </body>
 </html>

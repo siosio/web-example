@@ -37,7 +37,7 @@
     </div>
     <div class="required field" th:classappend="${#fields.hasErrors('clientId') ? 'error' : ''}">
       <label>顧客</label>
-      <input type="text" name="clientId" placeholder="顧客" th:field="*{clientId}">
+      <input type="text" name="clientId" placeholder="顧客" th:value="*{clientId}">
       <div class="ui pointing red basic label" th:if="${#fields.hasErrors('clientId')}" th:errors="*{clientId}">
       </div>
     </div>

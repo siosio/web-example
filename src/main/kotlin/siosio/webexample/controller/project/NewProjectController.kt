@@ -21,7 +21,7 @@ class NewProjectController(private val projectService: ProjectService) {
         return NewProjectForm()
     }
 
-    @GetMapping
+    @GetMapping()
     fun newProject(model: Model): String {
         return "project/new"
     }
@@ -40,6 +40,12 @@ class NewProjectController(private val projectService: ProjectService) {
         }
     }
 
+    @PostMapping(params = arrayOf("complete"))
+    fun complete(form: NewProjectForm): String {
+        println("form = ${form.projectName}")
+        return "project/new"
+    }
+
     class NewProjectForm {
         @get:ProjectName
         var projectName: String? = null
@@ -48,6 +54,7 @@ class NewProjectController(private val projectService: ProjectService) {
         var projectType: String? = null
 
         @get:ClientId
+        @get:NumberFormat(pattern = "#")
         var clientId: Long? = null
 
         @get:DateTimeFormat(pattern = "yyyy/MM/dd")
@@ -55,6 +62,12 @@ class NewProjectController(private val projectService: ProjectService) {
 
         @get:DateTimeFormat(pattern = "yyyy/MM/dd")
         var endDate: LocalDate? = null
+
+        fun getProjectTypeName(): String {
+            return ProjectType.values().firstOrNull() {
+                it.id == projectType
+            }?.label ?: ""
+        }
     }
 }
 
