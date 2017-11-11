@@ -11,14 +11,15 @@ class ProjectService(
         private val clientDao: ClientDao) {
 
     fun register(projectDto: ProjectDto): ProjectEntity {
-        return projectDao.insert(
-                ProjectEntity(projectDto.name, projectDto.type, projectDto.clientId)).entity.let {
-            if (projectDto.hasPeriod()) {
-                projectDao.insertProjectPeriod(
-                        ProjectPeriodEntity(it.projectId, projectDto.startDate, projectDto.endDate))
-            }
-            it
-        }
+        return projectDao.insert(ProjectEntity(projectDto.projectName, projectDto.projectType, projectDto.clientId))
+                .entity
+                .let {
+                    if (projectDto.hasPeriod()) {
+                        projectDao.insertProjectPeriod(
+                                ProjectPeriodEntity(it.projectId, projectDto.startDate, projectDto.endDate))
+                    }
+                    it
+                }
     }
 
     fun existsClient(clientId: Long): Boolean {

@@ -6,5 +6,12 @@
 <body>
 <div th:replace="common/application_header :: application_header">
 </div>
+<div class="ui main text container">
+  <h1 class="ui header">プロジェクト一覧</h1>
+  <div class="ui info message" th:if="${message}">
+    <i class="close icon"></i>
+    <th:block th:text="${message}"></th:block>
+  </div>
+</div>
 </body>
 </html>

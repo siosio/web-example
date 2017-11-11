@@ -49,6 +49,7 @@ dependencies {
   implementation('org.flywaydb:flyway-core')
   compile('org.springframework.boot:spring-boot-starter-security')
   compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+  runtime 'org.thymeleaf.extras:thymeleaf-extras-java8time'
   compile('org.springframework.boot:spring-boot-starter-web')
   compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
   compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")

@@ -20,7 +20,7 @@ class CodeValidatorTest {
     @Test
     fun Codeに存在する文字列の場合はバリデーションOKとなること() {
         val targetBean = TargetBean()
-        targetBean.code = "id1"
+        targetBean.code = "CODE1"
         assertThat(validator.validate(targetBean))
                 .isEmpty()
     }
@@ -47,7 +47,7 @@ class CodeValidatorTest {
 
     @Test
     fun 指定したクラスがEnumではない場合は例外() {
-        class Hoge(override val id: String, override val label: String) : CodeType
+        class Hoge(override val label: String) : CodeType
         class InvalidType {
             @get:Code(type = Hoge::class)
             var invalid: String? = null;
@@ -72,8 +72,8 @@ class CodeValidatorTest {
         var code: String? = null
     }
 
-    enum class CodeDef(override val id: String, override val label: String) : CodeType {
-        CODE1("id1", "1"),
-        CODE2("id2", "2")
+    enum class CodeDef(override val label: String) : CodeType {
+        CODE1("1"),
+        CODE2("2")
     }
 }
