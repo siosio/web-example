@@ -28,8 +28,8 @@
         <option value="">プロジェクトタイプ</option>
         <!--/*@thymesVar id="type" type="siosio.webexample.domain.ProjectType"*/-->
         <option th:each="type : ${T(siosio.webexample.domain.ProjectType).values()}"
-                th:value="${type.id}"
-                th:selected="${type.id == newProjectForm.projectType}"
+                th:value="${type.name()}"
+                th:selected="${type.name() == newProjectForm.projectType}"
                 th:text="${type.label}"></option>
       </select>
       <div class="ui pointing red basic label" th:if="${#fields.hasErrors('projectType')}" th:errors="*{projectType}">
@@ -41,22 +41,24 @@
       <div class="ui pointing red basic label" th:if="${#fields.hasErrors('clientId')}" th:errors="*{clientId}">
       </div>
     </div>
-    <div class="field ui calendar">
-      <label>プロジェクト開始日</label>
-      <div class="ui input left icon">
-        <i class="calendar icon"></i>
-        <input type="text" name="endDate" placeholder="プロジェクト開始日" th:field="*{startDate}">
-      </div>
-      <div class="ui pointing red basic label" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">
-      </div>
-    </div>
-    <div class="field ui calendar">
-      <label>プロジェクト終了日</label>
-      <div class="ui input left icon">
-        <i class="calendar icon"></i>
-        <input type="text" name="endDate" placeholder="プロジェクト終了日" th:field="*{endDate}">
-      </div>
-      <div class="ui pointing red basic label" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}">
+    <div class="field" th:classappend="${#fields.hasErrors('projectPeriod') ? 'error' : ''}">
+      <label>プロジェクト期間</label>
+      <div class="two fields">
+        <div class="field ui calendar" th:classappend="${#fields.hasErrors('startDate') ? 'error' : ''}">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" name="endDate" placeholder="プロジェクト開始日" th:field="*{startDate}">
+          </div>
+          <div class="ui pointing red basic label" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></div>
+          <div class="ui pointing red basic label" th:if="${#fields.hasErrors('projectPeriod')}" th:errors="*{projectPeriod}"></div>
+        </div>
+        <div class="field ui calendar" th:classappend="${#fields.hasErrors('endDate') ? 'error' : ''}">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" name="endDate" placeholder="プロジェクト終了日" th:field="*{endDate}">
+          </div>
+          <div class="ui pointing red basic label" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></div>
+        </div>
       </div>
     </div>
     <button class="primary ui button">確認</button>

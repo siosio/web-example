@@ -47,15 +47,17 @@
       <div th:text="*{clientId}">顧客</div>
       <input type="hidden" th:field="*{clientId}"/>
     </div>
-    <div class="field">
-      <label>プロジェクト開始日</label>
-      <div th:text="*{startDate}">2017/11/02</div>
-      <input type="hidden" th:field="*{startDate}"/>
-    </div>
-    <div class="field">
-      <label>プロジェクト終了日</label>
-      <div th:text="*{endDate}">2017/11/30</div>
-      <input type="hidden" th:field="*{endDate}"/>
+    <div class="two fields">
+      <div class="field">
+        <label>プロジェクト開始日</label>
+        <div th:text="${#temporals.format(newProjectForm.startDate, 'yyyy/MM/dd')}">2017/11/02</div>
+        <input type="hidden" th:field="*{startDate}"/>
+      </div>
+      <div class="field">
+        <label>プロジェクト終了日</label>
+        <div th:text="${#temporals.format(newProjectForm.endDate, 'yyyy/MM/dd')}">2017/11/30</div>
+        <input type="hidden" th:field="*{endDate}"/>
+      </div>
     </div>
     <div class="ui button" id="back">戻る</div>
     <div class="primary ui button" id="complete">登録</div>

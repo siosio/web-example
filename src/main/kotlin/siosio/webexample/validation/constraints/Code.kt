@@ -34,7 +34,7 @@ private class CodeValidator : ConstraintValidator<Code, String> {
             return false
         }
         return type.java.enumConstants.any {
-            it.id == value
+            (it as Enum<*>).name == value
         }
     }
 }
