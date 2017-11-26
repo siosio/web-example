@@ -7,6 +7,31 @@
           type="text/javascript"></script>
   <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.css"/>
+
+  <script>
+    $(function () {
+      // dialog
+      $('#client-search').click(function () {
+        $('#dialog')
+            .modal('show');
+        return false;
+      });
+
+      // calendar format
+      $('.ui.calendar').calendar({
+        type: 'date',
+        formatter: {
+          date: function (date) {
+            var day = ('0' + date.getDate()).slice(-2);
+            var month = ('0' + (date.getMonth() + 1)).slice(-2);
+            var year = date.getFullYear();
+            return year + '/' + month + '/' + day;
+          }
+        }
+      })
+    });
+    
+  </script>
 </head>
 <body>
 <div th:replace="common/application_header :: application_header">
@@ -37,7 +62,11 @@
     </div>
     <div class="required field" th:classappend="${#fields.hasErrors('clientId') ? 'error' : ''}">
       <label>顧客</label>
-      <input type="text" name="clientId" placeholder="顧客" th:value="*{clientId}">
+      <div class="ui input action">
+        <input type="text" placeholder="顧客" name="clientName" id="client-name" readonly="readonly" th:value="${newProjectForm.clientName}">
+        <input type="hidden" name="clientId" id="client-id" th:value="*{clientId}">
+        <button class="ui button" type="button" id="client-search">検索</button>
+      </div>
       <div class="ui pointing red basic label" th:if="${#fields.hasErrors('clientId')}" th:errors="*{clientId}">
       </div>
     </div>
@@ -49,8 +78,10 @@
             <i class="calendar icon"></i>
             <input type="text" name="endDate" placeholder="プロジェクト開始日" th:field="*{startDate}">
           </div>
-          <div class="ui pointing red basic label" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></div>
-          <div class="ui pointing red basic label" th:if="${#fields.hasErrors('projectPeriod')}" th:errors="*{projectPeriod}"></div>
+          <div class="ui pointing red basic label" th:if="${#fields.hasErrors('startDate')}"
+               th:errors="*{startDate}"></div>
+          <div class="ui pointing red basic label" th:if="${#fields.hasErrors('projectPeriod')}"
+               th:errors="*{projectPeriod}"></div>
         </div>
         <div class="field ui calendar" th:classappend="${#fields.hasErrors('endDate') ? 'error' : ''}">
           <div class="ui input left icon">
@@ -64,18 +95,6 @@
     <button class="primary ui button">確認</button>
   </form>
 </div>
-<script>
-  $('.ui.calendar').calendar({
-    type: 'date',
-    formatter: {
-      date: function (date) {
-        var day = ('0' + date.getDate()).slice(-2);
-        var month = ('0' + (date.getMonth() + 1)).slice(-2);
-        var year = date.getFullYear();
-        return year + '/' + month + '/' + day;
-      }
-    }
-  })
-</script>
+<div th:replace="client/clientSearchDialog :: dialog"></div>
 </body>
 </html>

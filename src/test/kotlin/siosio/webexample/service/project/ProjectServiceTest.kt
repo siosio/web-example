@@ -6,6 +6,7 @@ import org.junit.runner.*
 import org.seasar.doma.boot.autoconfigure.*
 import org.springframework.beans.factory.annotation.*
 import org.springframework.boot.test.context.*
+import org.springframework.test.context.*
 import org.springframework.test.context.junit4.*
 import siosio.webexample.*
 import siosio.webexample.domain.*
@@ -15,6 +16,7 @@ import java.time.*
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = arrayOf(WebExampleApplication::class))
+@TestPropertySource("/test.properties")
 class ProjectServiceTest {
 
     @Autowired

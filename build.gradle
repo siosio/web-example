@@ -1,7 +1,7 @@
 buildscript {
   ext {
     kotlinVersion = '1.1.51'
-    springBootVersion = '2.0.0.M5'
+    springBootVersion = '2.0.0.M6'
   }
   repositories {
     mavenCentral()
@@ -44,7 +44,7 @@ dependencies {
   // webjars
   runtime 'org.webjars:Semantic-UI:2.2.10'
   runtime 'org.webjars:jquery:3.2.1'
-
+  runtime 'org.webjars:jquery-ui:1.12.1'
 
   implementation('org.flywaydb:flyway-core')
   compile('org.springframework.boot:spring-boot-starter-security')
@@ -55,6 +55,7 @@ dependencies {
   compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 
   implementation 'org.seasar.doma.boot:doma-spring-boot-starter:1.1.1'
+  runtime 'com.zaxxer:HikariCP'
   runtime('com.h2database:h2')
   testCompile('org.springframework.boot:spring-boot-starter-test')
   testCompile('org.springframework.security:spring-security-test')

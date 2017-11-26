@@ -14,6 +14,7 @@ class SecurityConfig(private val userService: UserService) : WebSecurityConfigur
     override fun configure(http: HttpSecurity) {
         http.authorizeRequests()
                 .antMatchers("/webjars/**", "/css/**", "/js/**").permitAll()
+                .antMatchers("/projects/**").hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")

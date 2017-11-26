@@ -4,7 +4,7 @@ import javax.validation.*
 import javax.validation.constraints.*
 import kotlin.reflect.*
 
-@NotNull
+@NotNull(message = "{siosio.webexample.validation.ClientId.NotNull.message}")
 @Digits(integer = 18, fraction = 0)
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
