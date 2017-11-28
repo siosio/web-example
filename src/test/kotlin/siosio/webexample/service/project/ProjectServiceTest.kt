@@ -79,7 +79,7 @@ class ProjectServiceTest {
                 .containsExactly(tuple(result.projectId, result.name, result.type.toString(), result.clientId))
         // assert project period
         assertThat(searchProjectPeriod(domaConfig))
-                .`as`("うロジェクト期間は未指定なので登録されない")
+                .`as`("プロジェクト期間は未指定なので登録されない")
                 .isEmpty()
     }
 
