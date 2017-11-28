@@ -1,5 +1,6 @@
 package siosio.webexample.service.project
 
+import org.springframework.dao.*
 import org.springframework.stereotype.*
 import siosio.webexample.dao.project.*
 import siosio.webexample.entity.*
@@ -11,18 +12,19 @@ class ProjectService(
         private val clientDao: ClientDao) {
 
     fun register(projectDto: ProjectDto): ProjectEntity {
-        return projectDao.insert(ProjectEntity(projectDto.projectName, projectDto.projectType, projectDto.clientId))
-                .entity
-                .let {
-                    if (projectDto.hasPeriod()) {
-                        projectDao.insertProjectPeriod(
-                                ProjectPeriodEntity(it.projectId, projectDto.startDate, projectDto.endDate))
-                    }
-                    it
-                }
+        return try {
+            projectDao.insert(ProjectEntity(projectDto.projectName, projectDto.projectType, projectDto.clientId))
+        } catch (_: DataIntegrityViolationException) {
+            throw ClientNotFoundException(projectDto.clientId)
+        }.entity.apply {
+            if (projectDto.hasPeriod()) {
+                projectDao.insertProjectPeriod(
+                        ProjectPeriodEntity(projectId, projectDto.startDate, projectDto.endDate))
+            }
+        }
     }
 
-    fun existsClient(clientId: Long): Boolean {
-        return clientDao.existsClient(clientId)
-    }
+    fun existsClient(clientId: Long): Boolean = clientDao.existsClient(clientId)
+
+    class ClientNotFoundException(clientId: Long) : RuntimeException("client not found. client_id: $clientId")
 }

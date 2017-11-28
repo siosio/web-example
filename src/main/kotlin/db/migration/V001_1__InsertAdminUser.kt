@@ -18,7 +18,11 @@ class V001_1__InsertAdminUser : JdbcMigration {
         connection.prepareStatement("insert into user_roles(user_id, role) values (?, ?)").use {
             it.setString(1, "admin")
             it.setString(2, "ROLE_ADMIN")
-            it.executeUpdate()
+            it.addBatch()
+            it.setString(1, "admin")
+            it.setString(2, "ROLE_USER")
+            it.addBatch()
+            it.executeBatch()
         }
     }
 

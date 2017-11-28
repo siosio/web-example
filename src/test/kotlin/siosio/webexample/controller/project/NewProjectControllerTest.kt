@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.*
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import siosio.webexample.dao.project.*
 import siosio.webexample.domain.*
 import siosio.webexample.entity.*
 import siosio.webexample.service.dto.*
@@ -101,7 +100,7 @@ class NewProjectControllerTest {
     fun プロジェクト期間が一方しか入力されていない場合エラーとなり入力画面に戻ること() {
         given(mockService.existsClient(123L))
                 .willReturn(true)
-        
+
         //@formatter:off
         mockMvc.perform(
                 post("/projects/create?confirm=")
@@ -121,7 +120,7 @@ class NewProjectControllerTest {
         given(mockService.register(
                 ProjectDto("プロジェクト", ProjectType.MAINTENANCE_PROJECT, 999, LocalDate.of(2017, 11, 1), LocalDate.of(2017, 11, 30))))
                 .willReturn(ProjectEntity(9999L, "プロジェクト", ProjectType.MAINTENANCE_PROJECT, 999))
-        
+
         //@formatter:off
         mockMvc.perform(
                 post("/projects/create?complete=")
@@ -131,7 +130,28 @@ class NewProjectControllerTest {
                         .param("startDate", "2017/11/01")
                         .param("endDate", "2017/11/30")
                  )
-                .andExpect(view().name("redirect:projects"))
+                .andExpect(view().name("redirect:/projects"))
+        //@formatter:on
+    }
+
+    @Test
+    @WithMockUser
+    fun 登録時にプロジェクトが存在しない場合入力画面に戻ること() {
+        given(mockService.register(
+                ProjectDto("プロジェクト", ProjectType.MAINTENANCE_PROJECT, 999, LocalDate.of(2017, 11, 1), LocalDate.of(2017, 11, 30))))
+                .willThrow(ProjectService.ClientNotFoundException(999))
+
+        //@formatter:off
+        mockMvc.perform(
+                post("/projects/create?complete=")
+                        .param("projectName", "プロジェクト")
+                        .param("projectType", ProjectType.MAINTENANCE_PROJECT.name)
+                        .param("clientId", "999")
+                        .param("startDate", "2017/11/01")
+                        .param("endDate", "2017/11/30")
+                 )
+                .andExpect(view().name("project/new"))
+                .andExpect(model().attributeHasFieldErrors("newProjectForm", "clientId"))
         //@formatter:on
     }
 }

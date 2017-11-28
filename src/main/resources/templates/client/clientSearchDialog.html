@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<div th:fragment="dialog">
+  <div id="dialog" class="ui modal">
+    <i class="close icon"></i>
+    <div class="scrolling content">
+      <h1 class="header">顧客検索</h1>
+      <div id="client-list"></div>
+    </div>
+  </div>
+  <script th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js}" type="text/javascript"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/3.3.1/js/tabulator.min.js"></script>
+  <script th:src="@{/js/clientSearch.js}" type="text/javascript"></script>
+</div>
+</body>
+</html>

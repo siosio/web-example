@@ -44,8 +44,9 @@
     </div>
     <div class="field">
       <label>顧客</label>
-      <div th:text="*{clientId}">顧客</div>
+      <div th:text="*{clientName}">顧客</div>
       <input type="hidden" th:field="*{clientId}"/>
+      <input type="hidden" th:field="*{clientName}"/>
     </div>
     <div class="two fields">
       <div class="field">

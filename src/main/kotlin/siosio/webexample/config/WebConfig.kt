@@ -6,20 +6,26 @@ import org.springframework.validation.*
 import org.springframework.validation.beanvalidation.*
 import org.springframework.web.servlet.config.annotation.*
 
-
 @Configuration
-class WebConfig(private val messageSource: MessageSource) : WebMvcConfigurer {
+class WebConfig(private val messageSource: MessageSource) {
 
-    override fun addViewControllers(registry: ViewControllerRegistry) {
-        registry.addViewController("login").setViewName("auth/login")
+    @Bean
+    fun webMvcConfigurer(): WebMvcConfigurer {
+        return object : WebMvcConfigurer {
+
+            override fun addViewControllers(registry: ViewControllerRegistry) {
+                registry.addViewController("login").setViewName("auth/login")
+            }
+
+            override fun getValidator(): Validator = validator()
+        }
     }
-
+    
     @Bean
     fun validator(): LocalValidatorFactoryBean {
         val localValidatorFactoryBean = LocalValidatorFactoryBean()
         localValidatorFactoryBean.setValidationMessageSource(messageSource)
         return localValidatorFactoryBean
     }
-
-    override fun getValidator(): Validator = validator()
 }
+

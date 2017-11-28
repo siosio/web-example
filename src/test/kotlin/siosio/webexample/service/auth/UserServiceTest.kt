@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.*
 import org.springframework.security.core.authority.*
 import org.springframework.security.core.userdetails.*
 import org.springframework.security.crypto.password.*
+import org.springframework.test.context.*
 import org.springframework.test.context.junit4.*
 import siosio.webexample.*
 import siosio.webexample.dao.user.*
@@ -16,6 +17,7 @@ import siosio.webexample.dao.user.*
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = arrayOf(WebExampleApplication::class))
+@TestPropertySource("/test.properties")
 class UserServiceTest {
 
     @Autowired

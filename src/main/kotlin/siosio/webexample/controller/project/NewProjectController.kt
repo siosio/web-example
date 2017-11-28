@@ -1,6 +1,5 @@
 package siosio.webexample.controller.project
 
-import com.sun.xml.internal.stream.events.*
 import org.slf4j.*
 import org.springframework.format.annotation.*
 import org.springframework.stereotype.*
@@ -10,6 +9,7 @@ import org.springframework.validation.annotation.*
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.*
 import siosio.webexample.domain.*
+import siosio.webexample.entity.*
 import siosio.webexample.service.dto.*
 import siosio.webexample.service.project.*
 import siosio.webexample.validation.*
@@ -54,7 +54,7 @@ class NewProjectController(
     }
 
     @PostMapping(params = arrayOf("complete"))
-    fun complete(form: NewProjectForm, redirectAttributes: RedirectAttributes): String {
+    fun complete(form: NewProjectForm, bindingResult: BindingResult, redirectAttributes: RedirectAttributes): String {
         val projectDto = ProjectDto(
                 projectName = form.projectName!!,
                 projectType = ProjectType.valueOf(form.projectType!!),
@@ -62,7 +62,14 @@ class NewProjectController(
                 startDate = form.startDate,
                 endDate = form.endDate
         )
-        val entity = projectService.register(projectDto)
+        val entity: ProjectEntity
+        try {
+            entity = projectService.register(projectDto)
+        } catch (e: ProjectService.ClientNotFoundException) {
+            bindingResult.addError(FieldError("newProjectForm", "clientId", "顧客が存在しません。"))
+            return "project/new"
+        }
+
         if (logger.isDebugEnabled) {
             logger.debug("プロジェクトを登録: ${entity.projectId}")
         }
@@ -94,6 +101,8 @@ class NewProjectController(
         }
 
         fun getProjectTypeName(): String = projectType?.let { ProjectType.valueOf(it).label } ?: ""
+
+        var clientName: String? = null
     }
 }
 
