@@ -23,6 +23,12 @@ class ProjectService(
             }
         }
     }
+    
+    fun searchProjects(): List<ProjectInfo> {
+        return projectDao.search().map {
+            ProjectInfo(it.projectId)
+        }
+    }
 
     fun existsClient(clientId: Long): Boolean = clientDao.existsClient(clientId)
 

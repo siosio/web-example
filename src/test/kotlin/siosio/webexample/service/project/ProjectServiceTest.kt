@@ -92,5 +92,31 @@ class ProjectServiceTest {
                 .`as`("存在していないのでfalse")
                 .isFalse()
     }
+
+    @Test
+    fun プロジェクトが検索できること() {
+        // setup
+        domaConfig.dataSource.connection.use {
+            it.createStatement().use {
+                it.execute("set referential_integrity false")
+                it.execute("truncate table project")
+                it.execute("set referential_integrity true")
+            }
+            it.prepareStatement("insert into project (name, type, client_id) values (?, ?, ?)").use { ps ->
+                (1..5).forEach {
+                    ps.setString(1, "name_$it")
+                    ps.setString(2, "NEW_PROJECT")
+                    ps.setInt(3, 100)
+                    ps.addBatch()
+                }
+                ps.executeBatch()
+            }
+        }
+
+        val result = sut.searchProjects()
+        assertThat(result)
+                .extracting("projectId")
+                .containsExactly(1L, 2L, 3L, 4L, 5L)
+    }
 }
 
