@@ -61,6 +61,8 @@ dependencies {
   testCompile('org.springframework.security:spring-security-test')
 
   testCompile 'org.assertj:assertj-core'
+  
+  compile 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 task wrapper(type: Wrapper) {
