@@ -6,12 +6,37 @@
 <body>
 <div th:replace="common/application_header :: application_header">
 </div>
-<div class="ui main text container">
-  <h1 class="ui header">プロジェクト一覧</h1>
+<div class="ui main container">
   <div class="ui info message" th:if="${message}">
     <i class="close icon"></i>
     <th:block th:text="${message}"></th:block>
   </div>
+
+  <h1 class="ui header">プロジェクト一覧</h1>
+  <table class="ui striped table">
+    <thead>
+    <tr>
+      <th>id</th>
+      <th>プロジェクト名</th>
+      <th>プロジェクトタイプ</th>
+      <th>顧客</th>
+      <th>プロジェクト期間</th>
+    </tr>
+    </thead>
+    <!--/*@thymesVar id="projects" type="java.util.List<siosio.webexample.service.dto.ProjectInfo>"*/-->
+    <tr th:each="project : ${projects}">
+      <td th:text="${project.clientId}"></td>
+      <td th:text="${project.name}"></td>
+      <td th:text="${project.type.label}"></td>
+      <td th:text="${project.clientName}"></td>
+      <td>
+        <span th:if="${project.projectPeriod != null}" th:text="${#temporals.format(project.projectPeriod.startDate, 'yyyy/MM/dd')} + ' から ' + ${#temporals.format(project.projectPeriod.startDate, 'yyyy/MM/dd')}">
+        </span>
+      </td>
+    </tr>
+    <tbody>
+    </tbody>
+  </table>
 </div>
 </body>
 </html>

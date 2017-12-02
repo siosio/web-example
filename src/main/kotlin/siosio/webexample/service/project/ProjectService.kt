@@ -8,8 +8,8 @@ import siosio.webexample.service.dto.*
 
 @Service
 class ProjectService(
-        private val projectDao: ProjectDao,
-        private val clientDao: ClientDao) {
+    private val projectDao: ProjectDao,
+    private val clientDao: ClientDao) {
 
     fun register(projectDto: ProjectDto): ProjectEntity {
         return try {
@@ -19,8 +19,24 @@ class ProjectService(
         }.entity.apply {
             if (projectDto.hasPeriod()) {
                 projectDao.insertProjectPeriod(
-                        ProjectPeriodEntity(projectId, projectDto.startDate, projectDto.endDate))
+                    ProjectPeriodEntity(projectId, projectDto.startDate, projectDto.endDate))
             }
+        }
+    }
+
+    fun searchProjects(): List<ProjectInfo> {
+        return projectDao.search().map {
+            val projectPeriod = projectDao.findProjectPeriod(it.projectId) 
+            ProjectInfo(
+                projectId = it.projectId,
+                name = it.name,
+                type = it.type,
+                clientId = it.clientId,
+                clientName = clientDao.findById(it.clientId)?.name ?: "",
+                projectPeriod = projectPeriod?.let { 
+                    ProjectPeriod(it.startDate, it.endDate)
+                }
+            )
         }
     }
 
