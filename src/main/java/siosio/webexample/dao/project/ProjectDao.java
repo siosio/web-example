@@ -23,4 +23,7 @@ public interface ProjectDao {
 
     @Select
     List<ProjectEntity> search();
+
+    @Select
+    ProjectPeriodEntity findProjectPeriod(Long projectId);
 }
