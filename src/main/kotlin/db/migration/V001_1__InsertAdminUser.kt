@@ -9,7 +9,7 @@ class V001_1__InsertAdminUser : JdbcMigration {
     private val passwordEncoder = BCryptPasswordEncoder()
 
     override fun migrate(connection: Connection) {
-        connection.prepareStatement("insert into user(user_id, password) values (?, ?)").use {
+        connection.prepareStatement("insert into users(user_id, password) values (?, ?)").use {
             it.setString(1, "admin")
             it.setString(2, passwordEncoder.encode("admin"))
             it.executeUpdate()

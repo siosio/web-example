@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.*
 import org.springframework.boot.test.autoconfigure.web.servlet.*
 import org.springframework.boot.test.mock.mockito.*
 import org.springframework.security.test.context.support.*
+import org.springframework.security.test.web.servlet.request.*
 import org.springframework.test.context.junit4.*
 import org.springframework.test.web.servlet.*
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
@@ -31,8 +32,8 @@ class NewProjectControllerTest {
     @Test
     @WithMockUser
     fun バリデーションOKの場合確認画面に遷移すること() {
-        given(mockService.existsClient(1234554321L))
-                .willReturn(true)
+        `when`(mockService.existsClient(1234554321L))
+                .thenReturn(true)
 
         //@formatter:off
         mockMvc.perform(
@@ -42,6 +43,7 @@ class NewProjectControllerTest {
                         .param("clientId", "1234554321")
                         .param("startDate", "2017/11/01")
                         .param("endDate", "2017/11/30")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                  )
                 .andExpect(status().isOk)
                 .andExpect(view().name("project/new_confirm"))
@@ -65,6 +67,7 @@ class NewProjectControllerTest {
                         .param("clientId", "aaaa")
                         .param("startDate", "2017/11/1")
                         .param("endDate", "2017/11/31")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                  )
                 .andExpect(view().name("project/new"))
                 .andExpect(model().hasFieldErrorCodeInForm("projectName", "NotEmpty"))
@@ -89,6 +92,7 @@ class NewProjectControllerTest {
                         .param("clientId", "999")
                         .param("startDate", "2017/11/01")
                         .param("endDate", "2017/11/30")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                  )
                 .andExpect(view().name("project/new"))
                 .andExpect(model().attributeHasFieldErrors("newProjectForm", "clientId"))
@@ -108,6 +112,7 @@ class NewProjectControllerTest {
                         .param("projectType", ProjectType.NEW_PROJECT.name)
                         .param("clientId", "123")
                         .param("endDate", "2017/11/30")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                  )
                 .andExpect(view().name("project/new"))
                 .andExpect(model().attributeHasFieldErrors("newProjectForm", "projectPeriod"))
@@ -129,6 +134,7 @@ class NewProjectControllerTest {
                         .param("clientId", "999")
                         .param("startDate", "2017/11/01")
                         .param("endDate", "2017/11/30")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                  )
                 .andExpect(view().name("redirect:/projects"))
         //@formatter:on
@@ -149,6 +155,7 @@ class NewProjectControllerTest {
                         .param("clientId", "999")
                         .param("startDate", "2017/11/01")
                         .param("endDate", "2017/11/30")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                  )
                 .andExpect(view().name("project/new"))
                 .andExpect(model().attributeHasFieldErrors("newProjectForm", "clientId"))

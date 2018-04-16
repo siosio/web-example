@@ -1,12 +1,10 @@
 buildscript {
   ext {
-    kotlinVersion = '1.2.0'
-    springBootVersion = '2.0.0.M7'
+    kotlinVersion = '1.2.31'
+    springBootVersion = '2.0.1.RELEASE'
   }
   repositories {
     mavenCentral()
-    maven { url "https://repo.spring.io/snapshot" }
-    maven { url "https://repo.spring.io/milestone" }
   }
   dependencies {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -24,7 +22,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'idea'
 
 group = 'siosio'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = 1.8
 compileKotlin {
   kotlinOptions.jvmTarget = "1.8"
@@ -35,8 +33,15 @@ compileTestKotlin {
 
 repositories {
   mavenCentral()
-  maven { url "https://repo.spring.io/snapshot" }
-  maven { url "https://repo.spring.io/milestone" }
+  maven {
+    url 'https://repo.spring.io/libs-milestone'
+  }
+}
+
+dependencyManagement {
+  imports {
+    mavenBom 'org.springframework.cloud:spring-cloud-aws:2.0.0.M4'
+  }
 }
 
 
@@ -47,26 +52,40 @@ dependencies {
   runtime 'org.webjars:jquery-ui:1.12.1'
 
   implementation('org.flywaydb:flyway-core')
+  compile('org.springframework.boot:spring-boot-starter-web')
   compile('org.springframework.boot:spring-boot-starter-security')
+
+  // view
   compile('org.springframework.boot:spring-boot-starter-thymeleaf')
   runtime 'org.thymeleaf.extras:thymeleaf-extras-java8time'
-  compile('org.springframework.boot:spring-boot-starter-web')
-  compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
+
+  // session
+  compile 'org.springframework.boot:spring-boot-starter-data-redis'
+  compile 'org.springframework.session:spring-session-data-redis'
+
+  // aws
+  compile 'org.springframework.cloud:spring-cloud-starter-aws'
+
+  compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
   compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 
   implementation 'org.seasar.doma.boot:doma-spring-boot-starter:1.1.1'
-  runtime 'com.zaxxer:HikariCP'
-  runtime('com.h2database:h2')
+  runtime 'org.postgresql:postgresql'
   testCompile('org.springframework.boot:spring-boot-starter-test')
   testCompile('org.springframework.security:spring-security-test')
 
   testCompile 'org.assertj:assertj-core'
-  
+
   compile 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '4.3.1'
+  gradleVersion = '4.6'
 }
 
 idea.module.outputDir = compileJava.destinationDir
+
+// JavaクラスとSQLファイルの出力先ディレクトリを同じにする
+processResources.destinationDir = compileJava.destinationDir
+// コンパイルより前にSQLファイルを出力先ディレクトリにコピーするために依存関係を逆転する
+compileJava.dependsOn processResources

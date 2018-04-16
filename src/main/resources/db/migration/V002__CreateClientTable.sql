@@ -1,5 +1,5 @@
 create table client (
-  client_id bigint auto_increment not null,
+  client_id bigserial not null,
   name      varchar(256)          not null
 );
 

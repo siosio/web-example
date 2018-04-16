@@ -16,7 +16,7 @@ import java.time.*
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = arrayOf(WebExampleApplication::class))
-@TestPropertySource("/test.properties")
+@TestPropertySource("classpath:test.properties")
 class ProjectServiceTest {
 
     @Autowired
@@ -28,17 +28,17 @@ class ProjectServiceTest {
     @Before
     fun setUp() {
         domaConfig.dataSource.connection.use {
+            it.autoCommit = false
             it.createStatement().use {
-                it.execute("set referential_integrity false")
-                it.execute("truncate table PROJECT")
-                it.execute("truncate table CLIENT")
-                it.execute("set referential_integrity true")
+                it.execute("truncate table PROJECT cascade ")
+                it.execute("truncate table CLIENT cascade ")
                 it.execute("insert into CLIENT (CLIENT_ID, NAME) values (100, 'name')")
                 it.execute("insert into CLIENT (CLIENT_ID, NAME) values (101, 'name_101')")
                 it.execute("insert into CLIENT (CLIENT_ID, NAME) values (102, 'name_102')")
                 it.execute("insert into CLIENT (CLIENT_ID, NAME) values (103, 'name_103')")
                 it.execute("insert into CLIENT (CLIENT_ID, NAME) values (500, 'name')")
             }
+            it.commit()
         }
     }
 
@@ -101,9 +101,7 @@ class ProjectServiceTest {
         // setup
         domaConfig.dataSource.connection.use {
             it.createStatement().use {
-                it.execute("set referential_integrity false")
-                it.execute("truncate table PROJECT")
-                it.execute("set referential_integrity true")
+                it.execute("truncate table PROJECT cascade ")
             }
             it.prepareStatement("insert into PROJECT (NAME, TYPE, CLIENT_ID) values (?, ?, ?)").use { ps ->
                 (1..3).forEach {

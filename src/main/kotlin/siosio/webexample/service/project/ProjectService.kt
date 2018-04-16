@@ -2,6 +2,7 @@ package siosio.webexample.service.project
 
 import org.springframework.dao.*
 import org.springframework.stereotype.*
+import org.springframework.transaction.annotation.*
 import siosio.webexample.dao.project.*
 import siosio.webexample.entity.*
 import siosio.webexample.service.dto.*
@@ -11,6 +12,7 @@ class ProjectService(
     private val projectDao: ProjectDao,
     private val clientDao: ClientDao) {
 
+    @Transactional
     fun register(projectDto: ProjectDto): ProjectEntity {
         return try {
             projectDao.insert(ProjectEntity(projectDto.projectName, projectDto.projectType, projectDto.clientId))

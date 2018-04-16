@@ -17,7 +17,7 @@ import siosio.webexample.dao.user.*
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = arrayOf(WebExampleApplication::class))
-@TestPropertySource("/test.properties")
+@TestPropertySource("classpath:test.properties")
 class UserServiceTest {
 
     @Autowired
@@ -35,13 +35,12 @@ class UserServiceTest {
     @Before
     fun setUp() {
         domaConfig.dataSource.connection.use {
+            it.autoCommit = false
             it.createStatement().use {
-                it.execute("set referential_integrity false")
                 it.execute("truncate table user_roles")
-                it.execute("truncate table user")
-                it.execute("set referential_integrity true")
+                it.execute("truncate table users cascade ")
             }
-            it.prepareStatement("insert into user values (?, ?)").use {
+            it.prepareStatement("insert into users values (?, ?)").use {
                 it.setString(1, "test_user")
                 it.setString(2, passwordEncoder.encode("password"))
                 it.executeUpdate()
