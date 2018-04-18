@@ -19,6 +19,7 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
         http.authorizeRequests()
                 .antMatchers("/webjars/**", "/css/**", "/js/**").permitAll()
                 .antMatchers("/projects/**").hasRole("USER")
+                .antMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")

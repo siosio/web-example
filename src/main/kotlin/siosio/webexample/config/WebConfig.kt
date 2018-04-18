@@ -15,6 +15,7 @@ class WebConfig(private val messageSource: MessageSource) {
 
             override fun addViewControllers(registry: ViewControllerRegistry) {
                 registry.addViewController("login").setViewName("auth/login")
+                registry.addViewController("/").setViewName("redirect:projects")
             }
 
             override fun getValidator(): Validator = validator()
