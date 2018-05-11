@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common/include :: headerFragment(~{::title}, ~{}, ~{::script}, ~{::style})">
+<head th:include="common/include :: headerFragment(title = 'サンプルアプリケーション', script = ~{::script}, style = ~{::style})">
   <title>サンプルアプリケーション</title>
 
   <style>

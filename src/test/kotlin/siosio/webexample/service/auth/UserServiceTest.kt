@@ -1,23 +1,38 @@
 package siosio.webexample.service.auth
 
+import com.github.springtestdbunit.*
+import com.github.springtestdbunit.annotation.*
+import com.github.springtestdbunit.bean.*
 import org.assertj.core.api.Assertions.*
 import org.junit.*
 import org.junit.runner.*
 import org.seasar.doma.boot.autoconfigure.*
 import org.springframework.beans.factory.annotation.*
 import org.springframework.boot.test.context.*
+import org.springframework.context.annotation.*
 import org.springframework.security.core.authority.*
 import org.springframework.security.core.userdetails.*
 import org.springframework.security.crypto.password.*
 import org.springframework.test.context.*
 import org.springframework.test.context.junit4.*
+import org.springframework.test.context.support.*
+import org.springframework.test.context.transaction.*
 import siosio.webexample.*
 import siosio.webexample.dao.user.*
+import siosio.webexample.helper.*
+import javax.sql.*
 
 
 @RunWith(SpringRunner::class)
-@SpringBootTest(classes = arrayOf(WebExampleApplication::class))
+@SpringBootTest(classes = arrayOf(WebExampleApplication::class, UserServiceTest.Config::class))
 @TestPropertySource("classpath:test.properties")
+@TestExecutionListeners(value = [
+    (DependencyInjectionTestExecutionListener::class),
+    (DirtiesContextTestExecutionListener::class),
+    (TransactionalTestExecutionListener::class),
+    (DbUnitTestExecutionListener::class)]
+)
+@DbUnitConfiguration(dataSetLoader = CsvDataSetLoader::class, databaseConnection = ["connection"])
 class UserServiceTest {
 
     @Autowired
@@ -74,4 +89,15 @@ class UserServiceTest {
         assertThatThrownBy { sut.loadUserByUsername("not_found") }
                 .isInstanceOf(UsernameNotFoundException::class.java)
     }
+
+    @Configuration
+    class Config {
+        @Bean
+        fun connection(dataSource: DataSource): DatabaseDataSourceConnectionFactoryBean {
+            val databaseDataSourceConnectionFactoryBean = DatabaseDataSourceConnectionFactoryBean(dataSource)
+            databaseDataSourceConnectionFactoryBean.setSchema("test")
+            return databaseDataSourceConnectionFactoryBean
+        }
+    }
+
 }

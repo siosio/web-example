@@ -1,6 +1,8 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="headerFragment(title, style, script, link)">
+<head xmlns:th="http://www.thymeleaf.org" th:fragment="headerFragment">
+  <!--/*@thymesVar id="script" type="java.lang.String"*/-->
+  <!--/*@thymesVar id="link" type="java.lang.String"*/-->
+  <!--/*@thymesVar id="style" type="java.lang.String"*/-->
+  <!--/*@thymesVar id="title" type="java.lang.String"*/-->
   <meta charset="UTF-8" />
   <script type="text/javascript" th:inline="javascript">
     <!--
@@ -11,16 +13,22 @@
   <script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}" type="text/javascript"></script>
   <script th:src="@{/webjars/Semantic-UI/2.2.10/semantic.min.js}" type="text/javascript"></script>
   <script th:src="@{/js/common.js}" type="text/javascript"></script>
-  <th:block th:replace="${script}"/>
+  
+  <th:block th:if="${script != null}">
+    <th:block th:replace="${script}"/>
+  </th:block>
 
   <link th:href="@{/webjars/Semantic-UI/2.2.10/semantic.min.css}" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/3.3.1/css/semantic-ui/tabulator_semantic-ui.min.css" rel="stylesheet">
   <link th:href="@{/css/common.css}" rel="stylesheet"/>
-  <th:block th:replace="${link}"/>
+  
+  <th:block th:if="${link != null}">
+    <th:block th:replace="${link}"/>
+  </th:block>
 
-  <title th:replace="${title}">タイトル</title>
-  <th:block th:replace="${style}" />
+  <title th:text="${title}">タイトル</title>
+
+  <th:block th:if="${style != null}">
+    <th:block th:replace="${style}" />
+  </th:block>
 </head>
-<body>
-</body>
-</html>
